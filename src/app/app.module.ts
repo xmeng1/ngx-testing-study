@@ -4,12 +4,14 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { DefaultPipe } from './default.pipe';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DefaultPipe
+    DefaultPipe,
+    LoginComponent
   ],
   imports: [
     BrowserModule
