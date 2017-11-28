@@ -53,7 +53,6 @@ describe('LoginComponent', () => {
 
 
   it('login button hidden when the user is authenticated', () => {
-    // TODO
     // To being with Angular has not done any change detection so the content is blank.
     expect(el.nativeElement.textContent.trim()).toBe('');
     // Trigger change detection and this lets the template update to the initial value which is Login since by
