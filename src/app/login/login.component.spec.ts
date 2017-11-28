@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
 import { AuthService } from '../auth.service';
@@ -37,37 +37,37 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-/*  it('needsLogin returns true when the user is not authenticated', () => {
-    // spy service and mock the method to return some value
-    spyOn(authService, 'isAuthenticated').and.returnValue(false);
-    expect(component.needsLoginOld()).toBeTruthy();
-    // spy service to verify whether method is executed
-    expect(authService.isAuthenticated).toHaveBeenCalled();
-  });
+  /*  it('needsLogin returns true when the user is not authenticated', () => {
+      // spy service and mock the method to return some value
+      spyOn(authService, 'isAuthenticated').and.returnValue(false);
+      expect(component.needsLoginOld()).toBeTruthy();
+      // spy service to verify whether method is executed
+      expect(authService.isAuthenticated).toHaveBeenCalled();
+    });
 
-  it('needsLogin returns false when the user is authenticated', () => {
-    spyOn(authService, 'isAuthenticated').and.returnValue(true);
-    expect(component.needsLoginOld()).toBeFalsy();
-    expect(authService.isAuthenticated).toHaveBeenCalled();
-  });
+    it('needsLogin returns false when the user is authenticated', () => {
+      spyOn(authService, 'isAuthenticated').and.returnValue(true);
+      expect(component.needsLoginOld()).toBeFalsy();
+      expect(authService.isAuthenticated).toHaveBeenCalled();
+    });
 
 
-  it('login button hidden when the user is authenticated', () => {
-    // To being with Angular has not done any change detection so the content is blank.
-    expect(el.nativeElement.textContent.trim()).toBe('');
-    // Trigger change detection and this lets the template update to the initial value which is Login since by
-    // default we are not authenticated
-    fixture.detectChanges();
-    expect(el.nativeElement.textContent.trim()).toBe('Login');
-    // Change the authentication state to true
-    spyOn(authService, 'isAuthenticated').and.returnValue(true);
-    // The label is still Login! We need changeDetection to run and for angular to update the template.
-    expect(el.nativeElement.textContent.trim()).toBe('Login');
-    // Which we can trigger via fixture.detectChange()
-    fixture.detectChanges();
-    // Now the label is Logout
-    expect(el.nativeElement.textContent.trim()).toBe('Logout');
-  });*/
+    it('login button hidden when the user is authenticated', () => {
+      // To being with Angular has not done any change detection so the content is blank.
+      expect(el.nativeElement.textContent.trim()).toBe('');
+      // Trigger change detection and this lets the template update to the initial value which is Login since by
+      // default we are not authenticated
+      fixture.detectChanges();
+      expect(el.nativeElement.textContent.trim()).toBe('Login');
+      // Change the authentication state to true
+      spyOn(authService, 'isAuthenticated').and.returnValue(true);
+      // The label is still Login! We need changeDetection to run and for angular to update the template.
+      expect(el.nativeElement.textContent.trim()).toBe('Login');
+      // Which we can trigger via fixture.detectChange()
+      fixture.detectChanges();
+      // Now the label is Logout
+      expect(el.nativeElement.textContent.trim()).toBe('Logout');
+    });*/
 
   it('Button label via jasmine without done', () => {
     fixture.detectChanges();
@@ -92,4 +92,27 @@ describe('LoginComponent', () => {
       done();
     });
   });
+
+  it('Button label via async() and whenStable()', async(() => {
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent.trim()).toBe('Login');
+    spyOn(authService, 'isAuthenticated').and.returnValue(Promise.resolve(true));
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(el.nativeElement.textContent.trim()).toBe('Logout');
+    });
+    component.ngOnInit();
+  }));
+
+  it('Button label via fakeAsync() and tick()', fakeAsync(() => {
+    expect(el.nativeElement.textContent.trim()).toBe('');
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent.trim()).toBe('Login');
+    spyOn(authService, 'isAuthenticated').and.returnValue(Promise.resolve(true));
+    component.ngOnInit();
+    tick();
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent.trim()).toBe('Logout');
+  }));
+
 });
