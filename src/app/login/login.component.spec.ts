@@ -40,14 +40,14 @@ describe('LoginComponent', () => {
   it('needsLogin returns true when the user is not authenticated', () => {
     // spy service and mock the method to return some value
     spyOn(authService, 'isAuthenticated').and.returnValue(false);
-    expect(component.needsLogin()).toBeTruthy();
+    expect(component.needsLoginOld()).toBeTruthy();
     // spy service to verify whether method is executed
     expect(authService.isAuthenticated).toHaveBeenCalled();
   });
 
   it('needsLogin returns false when the user is authenticated', () => {
     spyOn(authService, 'isAuthenticated').and.returnValue(true);
-    expect(component.needsLogin()).toBeFalsy();
+    expect(component.needsLoginOld()).toBeFalsy();
     expect(authService.isAuthenticated).toHaveBeenCalled();
   });
 
@@ -66,6 +66,15 @@ describe('LoginComponent', () => {
     // Which we can trigger via fixture.detectChange()
     fixture.detectChanges();
     // Now the label is Logout
+    expect(el.nativeElement.textContent.trim()).toBe('Logout');
+  });
+
+  it('Button label via jasmine.done', () => {
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent.trim()).toBe('Login');
+    spyOn(authService, 'isAuthenticated').and.returnValue(Promise.resolve(true));
+    component.ngOnInit();
+    fixture.detectChanges();
     expect(el.nativeElement.textContent.trim()).toBe('Logout');
   });
 });
