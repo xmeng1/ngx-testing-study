@@ -37,7 +37,7 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('needsLogin returns true when the user is not authenticated', () => {
+/*  it('needsLogin returns true when the user is not authenticated', () => {
     // spy service and mock the method to return some value
     spyOn(authService, 'isAuthenticated').and.returnValue(false);
     expect(component.needsLoginOld()).toBeTruthy();
@@ -67,14 +67,29 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
     // Now the label is Logout
     expect(el.nativeElement.textContent.trim()).toBe('Logout');
-  });
+  });*/
 
-  it('Button label via jasmine.done', () => {
+  it('Button label via jasmine without done', () => {
     fixture.detectChanges();
     expect(el.nativeElement.textContent.trim()).toBe('Login');
     spyOn(authService, 'isAuthenticated').and.returnValue(Promise.resolve(true));
     component.ngOnInit();
     fixture.detectChanges();
-    expect(el.nativeElement.textContent.trim()).toBe('Logout');
+    // When performing testing like ngOnInit(). Angular won’t do this for us in the test environment.
+    // we need to call component lifecycle hooks ourselves,
+    expect(el.nativeElement.textContent.trim()).toBe('Login');
+  });
+
+  it('Button label via jasmine.done', (done) => {
+    fixture.detectChanges();
+    expect(el.nativeElement.textContent.trim()).toBe('Login');
+    const spy2 = spyOn(authService,
+      'isAuthenticated').and.returnValue(Promise.resolve(true));
+    component.ngOnInit();
+    spy2.calls.mostRecent().returnValue.then(() => {
+      fixture.detectChanges();
+      expect(el.nativeElement.textContent.trim()).toBe('Logout');
+      done();
+    });
   });
 });
