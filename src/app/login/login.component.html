@@ -9,15 +9,26 @@
   <span *ngIf="!needsLogin">Logout</span>
 </a>
 -->
-<form>
+<!--<form>-->
+  <!--<label>Email</label>-->
+  <!--<input type="email"-->
+         <!--#email>-->
+  <!--<label>Password</label>-->
+  <!--<input type="password"-->
+         <!--#password>-->
+  <!--<button type="button"-->
+          <!--(click)="login(email.value, password.value)"-->
+          <!--[disabled]="!enabled">Login-->
+  <!--</button>-->
+<!--</form>-->
+
+
+<form (ngSubmit)="login()" [formGroup]="form">
   <label>Email</label>
   <input type="email"
-         #email>
+         formControlName="email">
   <label>Password</label>
   <input type="password"
-         #password>
-  <button type="button"
-          (click)="login(email.value, password.value)"
-          [disabled]="!enabled">Login
-  </button>
+         formControlName="password">
+  <button type="submit">Login</button>
 </form>

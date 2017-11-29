@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { User } from '../model/user';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -207,5 +208,55 @@ describe('Component: Login new', () => {
 
     expect(user.email).toBe('test@example.com');
     expect(user.password).toBe('123456');
+  });
+
+});
+
+describe('Component: Login new 2', () => {
+  let component: LoginComponent;
+  let fixture: ComponentFixture<LoginComponent>;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, FormsModule],
+      declarations: [LoginComponent],
+      providers: [AuthService]
+    });
+    // create component and test fixture
+    fixture = TestBed.createComponent(LoginComponent);
+    // get test component from the fixture
+    component = fixture.componentInstance;
+    component.ngOnInit();
+  });
+
+
+  it('form invalid when empty', () => {
+    expect(component.form.valid).toBeFalsy();
+  });
+
+  it('email field validity', () => {
+    const email = component.form.controls['email'];
+    expect(email.valid).toBeFalsy();
+  });
+
+  it('email field validity', () => {
+    let errors = {};
+    const email = component.form.controls['email'];
+    errors = email.errors || {};
+    expect(errors['required']).toBeTruthy();
+  });
+
+  it('submitting a form emits a user', () => {
+    expect(component.form.valid).toBeFalsy();
+    component.form.controls['email'].setValue('test@test.com');
+    component.form.controls['password'].setValue('123456789');
+    expect(component.form.valid).toBeTruthy();
+    let user: User;
+    // Subscribe to the Observable and store the user in a local variable.
+    component.loggedIn.subscribe((value) => user = value);
+    // Trigger the login function
+    component.login();
+    // Now we can check to make sure the emitted value is correct
+    expect(user.email).toBe('test@test.com');
+    expect(user.password).toBe('123456789');
   });
 });

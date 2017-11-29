@@ -7,6 +7,7 @@ import { DefaultPipe } from './default.pipe';
 import { LoginComponent } from './login/login.component';
 import { HoverFocusDirective } from './hover-focus.directive';
 import { TestHoverFocusComponent } from './testing/test-hover-focus/test-hover-focus.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -18,7 +19,9 @@ import { TestHoverFocusComponent } from './testing/test-hover-focus/test-hover-f
     TestHoverFocusComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
