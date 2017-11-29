@@ -164,3 +164,23 @@ describe('Component: Login', () => {
     expect(componentService instanceof MockAuthService).toBeTruthy();
   });
 });
+
+describe('Component: Login new', () => {
+  let component: LoginComponent;
+  let fixture: ComponentFixture<LoginComponent>;
+  let submitEl: DebugElement;
+  let loginEl: DebugElement;
+  let passwordEl: DebugElement;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [LoginComponent]
+    });
+    // create component and test fixture
+    fixture = TestBed.createComponent(LoginComponent);
+    // get test component from the fixture
+    component = fixture.componentInstance;
+    submitEl = fixture.debugElement.query(By.css('button'));
+    loginEl = fixture.debugElement.query(By.css('input[type=email]'));
+    passwordEl = fixture.debugElement.query(By.css('input[type=password]'));
+  });
+});
