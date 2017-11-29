@@ -4,6 +4,7 @@ import { LoginComponent } from './login.component';
 import { AuthService } from '../auth.service';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { User } from '../model/user';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -173,7 +174,8 @@ describe('Component: Login new', () => {
   let passwordEl: DebugElement;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginComponent]
+      declarations: [LoginComponent],
+      providers: [AuthService]
     });
     // create component and test fixture
     fixture = TestBed.createComponent(LoginComponent);
@@ -182,5 +184,28 @@ describe('Component: Login new', () => {
     submitEl = fixture.debugElement.query(By.css('button'));
     loginEl = fixture.debugElement.query(By.css('input[type=email]'));
     passwordEl = fixture.debugElement.query(By.css('input[type=password]'));
+  });
+
+
+  it('Setting enabled to false disables the submit button', () => {
+    component.enabled = false;
+    fixture.detectChanges();
+    expect(submitEl.nativeElement.disabled).toBeTruthy();
+  });
+
+
+  it('Entering email and password emits loggedIn event', () => {
+    let user: User;
+    loginEl.nativeElement.value = 'test@example.com';
+    passwordEl.nativeElement.value = '123456';
+
+    component.loggedIn.subscribe((value) => user = value);
+
+    // We could call the component.login(…) function ourselves but for the purposes of
+    // this lecture we want to trigger the function from the view.
+    submitEl.triggerEventHandler('click', null);
+
+    expect(user.email).toBe('test@example.com');
+    expect(user.password).toBe('123456');
   });
 });
