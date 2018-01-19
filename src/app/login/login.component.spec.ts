@@ -134,7 +134,7 @@ describe('Component: Login', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let testBedService: AuthService;
   let componentService: AuthService;
-  beforeEach(() => {
+  beforeEach(async(() => {
 // refine the test module by declaring the test component
     TestBed.configureTestingModule({
       declarations: [LoginComponent],
@@ -153,7 +153,7 @@ describe('Component: Login', () => {
     testBedService = TestBed.get(AuthService);
 // AuthService provided by Component, (should return MockAuthService)
     componentService = fixture.debugElement.injector.get(AuthService);
-  });
+  }));
   it('Service injected via inject(...) and TestBed.get(...) should be the same instance',
     inject([AuthService], (injectService: AuthService) => {
       expect(injectService).toBe(testBedService);
